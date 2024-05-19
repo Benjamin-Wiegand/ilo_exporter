@@ -132,7 +132,7 @@ if __name__ == '__main__':
     config = SnmpConfiguration(
         SnmpEngine(),
         CommunityData(args.snmp_community),
-        UdpTransportTarget((args.ilo_address[0], args.snmp_port)),
+        UdpTransportTarget((args.ilo_address, args.snmp_port)),
         ContextData(),
     )
 
