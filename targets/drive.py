@@ -2,12 +2,16 @@ from snmp_groups import BulkEnums, BulkNumbers, BulkStrings
 
 DRIVE_INDEX = '1.3.6.1.4.1.232.3.2.5.1.1.2'
 
-# controller? idk
-# if anyone can show me a situation where this and drive bay are not related I'll uncomment this
+# controller index?
 # DRIVE_CONTROLLER = BulkNumbers(
 #     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 1) + i),
 #     'controller'
 # )
+
+DRIVE_PORT = BulkStrings(
+    (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 62) + i),
+    'port'
+)
 
 DRIVE_BOX = BulkNumbers(
     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 63) + i),
@@ -33,6 +37,11 @@ DRIVE_LOCATION = BulkStrings(
 DRIVE_SERIAL = BulkStrings(
     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 51) + i),
     'serial',
+)
+
+DRIVE_MODEL = BulkStrings(
+    (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 4) + i),
+    'model',
 )
 
 DRIVE_SIZE = BulkNumbers(

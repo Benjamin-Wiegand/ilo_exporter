@@ -177,12 +177,12 @@ if __name__ == '__main__':
         DRIVE_INDEX,
         'drive',
         not args.scan_drives_once,
-        ('Information about installed drives', no_value, [DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_LOCATION, DRIVE_SERIAL, DRIVE_LINK_RATE, DRIVE_STATUS, DRIVE_CONDITION]),
-        ('Sizes of installed drives in megabytes', DRIVE_SIZE, [DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_LOCATION, DRIVE_SERIAL]),
-        ('Temperatures of installed drives in celsius', DRIVE_TEMP, [DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_LOCATION, DRIVE_SERIAL]),
-        ('Temperature thresholds of installed drives in celsius', DRIVE_TEMP_THRESHOLD, [DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_LOCATION, DRIVE_SERIAL]),
-        ('Maximum temperatures of installed drives in celsius', DRIVE_TEMP_MAX, [DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_LOCATION, DRIVE_SERIAL]),
-        ('Reference time of installed drives in hours', DRIVE_REFERENCE_TIME, [DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_LOCATION, DRIVE_SERIAL]),
+        ('Information about installed drives', no_value, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL, DRIVE_LINK_RATE, DRIVE_STATUS, DRIVE_CONDITION]),
+        ('Sizes of installed drives in megabytes', DRIVE_SIZE, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
+        ('Temperatures of installed drives in celsius', DRIVE_TEMP, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
+        ('Temperature thresholds of installed drives in celsius', DRIVE_TEMP_THRESHOLD, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
+        ('Maximum temperatures of installed drives in celsius', DRIVE_TEMP_MAX, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
+        ('Reference time of installed drives in hours', DRIVE_REFERENCE_TIME, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
         scan_method=scrape.detect_complex,
     ))
 
