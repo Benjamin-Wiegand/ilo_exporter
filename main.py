@@ -17,7 +17,6 @@ from targets.memory import *
 import targets.power
 
 import argparse
-import traceback
 
 NAMESPACE = 'ilo'
 
@@ -41,7 +40,7 @@ if args.quiet and args.verbose:
     print('stop it. (--quiet and --verbose do not mix)')
     exit(1)
 
-SCAN_FAIL_COUNTER = Counter('exporter', 'Number of times scanning the iLO for SNMP variables has failed.', namespace=NAMESPACE, subsystem='snmp_scan_failures')
+SCAN_FAIL_COUNTER = Counter('scrape_failures', 'Number of times scraping the iLO for SNMP variables has failed.', namespace=NAMESPACE, subsystem='exporter')
 
 
 def noisy(*a, **kwa):
@@ -76,49 +75,49 @@ class BulkCollector(Collector):
     def collect(self):
         cache = {}
 
-        if self._scan_on_collect:
-            try:
+        try:
+            if self._scan_on_collect:
                 self.scan()
-            except Exception as e:
-                traceback.print_exception(e)
-                print('Failed to scan SNMP, aborting collection')
-                SCAN_FAIL_COUNTER.inc()
-                return
 
-        for documentation, bulk_values, bulk_labels in self._metrics_groups:
-            metric_name = self._name_template % bulk_values.name
-            verbose('collecting', metric_name)
+            for documentation, bulk_values, bulk_labels in self._metrics_groups:
+                metric_name = self._name_template % bulk_values.name
+                verbose('collecting', metric_name)
 
-            label_names = ['id']
-            label_maps = []
+                label_names = ['id']
+                label_maps = []
 
-            for label in bulk_labels:
-                # the labels are cached since they may be reused
-                if label.name not in cache:
-                    cache[label.name] = label.get_values(self._snmp_config, self._ids)
-                label_names.append(label.name)
-                label_maps.append(cache[label.name])
+                for label in bulk_labels:
+                    # the labels are cached since they may be reused
+                    if label.name not in cache:
+                        cache[label.name] = label.get_values(self._snmp_config, self._ids)
+                    label_names.append(label.name)
+                    label_maps.append(cache[label.name])
 
-            metric = GaugeMetricFamily(
-                metric_name,
-                documentation,
-                labels=label_names
-            )
+                metric = GaugeMetricFamily(
+                    metric_name,
+                    documentation,
+                    labels=label_names
+                )
 
-            # values are not reused
-            value_map = bulk_values.get_values(self._snmp_config, self._ids)
+                # values are not reused
+                value_map = bulk_values.get_values(self._snmp_config, self._ids)
 
-            # do some fuckery (bad design, I know.)
-            for i in self._ids:
-                labels = [str(i)]  # id is first
-                for label_map in label_maps:
-                    label_value = label_map[i]
-                    labels.append(str(label_value))
+                # do some fuckery (bad design, I know.)
+                for i in self._ids:
+                    labels = [str(i)]  # id is first
+                    for label_map in label_maps:
+                        label_value = label_map[i]
+                        labels.append(str(label_value))
 
-                value = value_map[i]
-                metric.add_metric(labels, value)
+                    value = value_map[i]
+                    metric.add_metric(labels, value)
 
-            yield metric
+                yield metric
+
+        except Exception as e:
+            print('Failed to scan SNMP, aborting collection')
+            SCAN_FAIL_COUNTER.inc()
+            raise e
 
 
 def get_power_draw() -> float:
