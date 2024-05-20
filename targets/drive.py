@@ -2,7 +2,7 @@ from snmp_groups import BulkEnums, BulkNumbers, BulkStrings
 
 DRIVE_INDEX = '1.3.6.1.4.1.232.3.2.5.1.1.2'
 
-# controller index?
+# controller index
 # DRIVE_CONTROLLER = BulkNumbers(
 #     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 1) + i),
 #     'controller'
@@ -39,9 +39,9 @@ DRIVE_SERIAL = BulkStrings(
     'serial',
 )
 
-DRIVE_MODEL = BulkStrings(
+DRIVE_FIRMWARE = BulkStrings(
     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 4) + i),
-    'model',
+    'firmware',
 )
 
 DRIVE_SIZE = BulkNumbers(
@@ -107,3 +107,49 @@ DRIVE_REFERENCE_TIME = BulkNumbers(
     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 9) + i),
     'reference_time'
 )
+
+DRIVE_SUPPORTS_PREDICTIVE_FAILURE_MONITORING = BulkEnums(
+    (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 52) + i),
+    'supports_predictive_failure_monitoring',
+    {
+        1: 'other',
+        2: 'notAvailable',
+        3: 'available'
+    }
+)
+
+DRIVE_SMART_STATUS = BulkEnums(
+    (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 57) + i),
+    'smart_status',
+    {
+        1: 'other',
+        2: 'ok',
+        3: 'replaceDrive'
+    }
+)
+
+DRIVE_ROTATIONAL_SPEED = BulkEnums(
+    (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 59) + i),
+    'rotational_speed',
+    {
+        1: 'other',
+        2: '7200 rpm',
+        3: '10k rpm',
+        4: '15k rpm',
+        5: 'ssd',
+    }
+)
+
+DRIVE_MEDIA_TYPE = BulkEnums(
+    (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 69) + i),
+    'media_type',
+    {
+        1: 'other',
+        2: 'rotatingPlatters',
+        3: 'solidState',
+    }
+)
+
+
+# there appear to be a hell of a lot more, but I don't have the time to add them all right now
+# here is a reference: https://oidref.com/1.3.6.1.4.1.232.3.2.5.1.1

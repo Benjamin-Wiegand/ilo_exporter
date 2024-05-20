@@ -49,8 +49,9 @@ TEMP_CONDITION = BulkEnums(
     'condition',
     {
         1: 'other',
-        2: 'normal',
-        3: 'high',
+        2: 'ok',
+        3: 'degraded',
+        4: 'failed',
     }
 )
 

@@ -14,7 +14,7 @@ from targets.fan import *
 from targets.cpu import *
 from targets.drive import *
 from targets.memory import *
-import targets.power
+from targets.power import *
 
 import argparse
 
@@ -120,10 +120,45 @@ class BulkCollector(Collector):
             raise e
 
 
-def get_power_draw() -> float:
-    verbose('collecting ilo_server_power_draw')
-    val = snmp_get(config, targets.power.POWER_METER_READING)
-    return val
+class PowerCollector(Collector):
+    def collect(self) -> float:
+        verbose('collecting ilo_server_power_draw')
+        try:
+            reading = snmp_get(config, POWER_METER_READING)
+            support = snmp_get(config, POWER_METER_SUPPORT)
+            status = snmp_get(config, POWER_METER_STATUS)
+
+            if not isinstance(reading, int):
+                print('expected power meter reading to be an int, got', type(reading))
+                print('value in question:', reading)
+                reading = -1
+            if not isinstance(support, int):
+                print('expected power meter support to be an int, got', type(support))
+                print('value in question:', support)
+                support = 1
+            if not isinstance(status, int):
+                print('expected power meter status to be an int, got', type(status))
+                print('value in question:', status)
+                status = 1
+
+            if support not in POWER_METER_SUPPORT_MAP:
+                print('ILO returned a value outside of the expected range for POWER_METER_SUPPORT:', support)
+                support_s = 'unknown'
+            else:
+                support_s = POWER_METER_SUPPORT_MAP[support]
+            if status not in POWER_METER_STATUS_MAP:
+                print('ILO returned a value outside of the expected range for POWER_METER_STATUS:', status)
+                status_s = 'unknown'
+            else:
+                status_s = POWER_METER_STATUS_MAP[status]
+
+            metric = GaugeMetricFamily('ilo_server_power_draw', 'Power draw of the server in watts', labels=['support', 'status'])
+            metric.add_metric([support_s, status_s], reading)
+            yield metric
+        except Exception as e:
+            print('Failed to scan SNMP, aborting collection')
+            SCAN_FAIL_COUNTER.inc()
+            raise e
 
 
 if __name__ == '__main__':
@@ -135,8 +170,7 @@ if __name__ == '__main__':
         ContextData(),
     )
 
-    power = Gauge("ilo_server_power_draw", "Power draw of the server in watts")
-    power.set_function(get_power_draw)
+    REGISTRY.register(PowerCollector())
 
     no_value = BulkDummyValue('info')
 
@@ -176,12 +210,12 @@ if __name__ == '__main__':
         DRIVE_INDEX,
         'drive',
         not args.scan_drives_once,
-        ('Information about installed drives', no_value, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL, DRIVE_LINK_RATE, DRIVE_STATUS, DRIVE_CONDITION]),
-        ('Sizes of installed drives in megabytes', DRIVE_SIZE, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
-        ('Temperatures of installed drives in celsius', DRIVE_TEMP, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
-        ('Temperature thresholds of installed drives in celsius', DRIVE_TEMP_THRESHOLD, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
-        ('Maximum temperatures of installed drives in celsius', DRIVE_TEMP_MAX, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
-        ('Reference time of installed drives in hours', DRIVE_REFERENCE_TIME, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_MODEL, DRIVE_SERIAL]),
+        ('Information about installed drives', no_value, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL, DRIVE_FIRMWARE, DRIVE_LINK_RATE, DRIVE_SUPPORTS_PREDICTIVE_FAILURE_MONITORING, DRIVE_SMART_STATUS, DRIVE_MEDIA_TYPE, DRIVE_ROTATIONAL_SPEED, DRIVE_STATUS, DRIVE_CONDITION]),
+        ('Sizes of installed drives in megabytes', DRIVE_SIZE, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
+        ('Temperatures of installed drives in celsius', DRIVE_TEMP, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
+        ('Temperature thresholds of installed drives in celsius', DRIVE_TEMP_THRESHOLD, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
+        ('Maximum temperatures of installed drives in celsius', DRIVE_TEMP_MAX, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
+        ('Reference time of installed drives in hours', DRIVE_REFERENCE_TIME, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
         scan_method=scrape.detect_complex,
     ))
 
