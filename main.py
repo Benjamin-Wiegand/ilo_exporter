@@ -1,4 +1,4 @@
-from prometheus_client import start_http_server, Gauge, Counter
+from prometheus_client import start_http_server, Counter
 from prometheus_client.core import REGISTRY, GaugeMetricFamily
 from prometheus_client.registry import Collector
 
@@ -179,8 +179,9 @@ if __name__ == '__main__':
         TEMP_INDEX,
         'temperature',
         not args.scan_once,
-        ('Temperatures readings of each temperature sensor in celsius', TEMP_CELSIUS, [TEMP_SENSOR_LOCALE, TEMP_CONDITION]),
-        ('Temperature thresholds for each temperature sensor in celsius', TEMP_THRESHOLD, [TEMP_SENSOR_LOCALE, TEMP_THRESHOLD_TYPE]),
+        ('Information temperature sensors', no_value, [TEMP_SENSOR_LOCALE, TEMP_CONDITION, TEMP_THRESHOLD_TYPE]),
+        ('Temperatures readings of each temperature sensor in celsius', TEMP_CELSIUS, []),
+        ('Temperature thresholds for each temperature sensor in celsius', TEMP_THRESHOLD, []),
     ))
 
     REGISTRY.register(BulkCollector(
@@ -197,10 +198,10 @@ if __name__ == '__main__':
         'cpu',
         not args.scan_once,
         ('Information about CPUs', no_value, [CPU_NAME, CPU_STATUS, CPU_POWER_STATUS]),
-        ('Speed of CPUs in megahertz', CPU_SPEED, [CPU_NAME]),
-        ('CPU step', CPU_STEP, [CPU_NAME]),     # I dunno
-        ('Number of enabled cores', CORES_ENABLED, [CPU_NAME]),
-        ('Number of available threads', THREADS_AVAILABLE, [CPU_NAME]),
+        ('Speed of CPUs in megahertz', CPU_SPEED, []),
+        ('CPU step', CPU_STEP, []),     # revision?
+        ('Number of enabled cores', CORES_ENABLED, []),
+        ('Number of available threads', THREADS_AVAILABLE, []),
     ))
 
     # logical drives are for v2 if it ever exists (I don't use logical drives, sorry)
@@ -211,11 +212,11 @@ if __name__ == '__main__':
         'drive',
         not args.scan_drives_once,
         ('Information about installed drives', no_value, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL, DRIVE_FIRMWARE, DRIVE_LINK_RATE, DRIVE_SUPPORTS_PREDICTIVE_FAILURE_MONITORING, DRIVE_SMART_STATUS, DRIVE_MEDIA_TYPE, DRIVE_ROTATIONAL_SPEED, DRIVE_STATUS, DRIVE_CONDITION]),
-        ('Sizes of installed drives in megabytes', DRIVE_SIZE, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
-        ('Temperatures of installed drives in celsius', DRIVE_TEMP, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
-        ('Temperature thresholds of installed drives in celsius', DRIVE_TEMP_THRESHOLD, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
-        ('Maximum temperatures of installed drives in celsius', DRIVE_TEMP_MAX, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
-        ('Reference time of installed drives in hours', DRIVE_REFERENCE_TIME, [DRIVE_PORT, DRIVE_BOX, DRIVE_BAY, DRIVE_VENDOR, DRIVE_SERIAL]),
+        ('Sizes of installed drives in megabytes', DRIVE_SIZE, []),
+        ('Temperatures of installed drives in celsius', DRIVE_TEMP, []),
+        ('Temperature thresholds of installed drives in celsius', DRIVE_TEMP_THRESHOLD, []),
+        ('Maximum temperatures of installed drives in celsius', DRIVE_TEMP_MAX, []),
+        ('Reference time of installed drives in hours', DRIVE_REFERENCE_TIME, []),
         scan_method=scrape.detect_complex,
     ))
 
@@ -225,7 +226,7 @@ if __name__ == '__main__':
         'memory',
         not args.scan_once,
         ('Information about system memory', no_value, [MEMORY_LOCATION, MEMORY_MANUFACTURER, MEMORY_PART_NUMBER, MEMORY_STATUS, MEMORY_CONDITION]),
-        ('Sizes of system memory modules in kilobytes', MEMORY_SIZE, [MEMORY_LOCATION]),
+        ('Sizes of system memory modules in kilobytes', MEMORY_SIZE, []),
     ))
 
     # start metrics endpoint
