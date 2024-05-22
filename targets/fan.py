@@ -68,6 +68,9 @@ FAN_CONDITION = BulkEnums(
     }
 )
 
+# https
+FAN_ENDPOINT = 'json/health_fans'
+
 # for debugging
 FAN_VALUES = [
     FAN_LOCALE,

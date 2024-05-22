@@ -1,4 +1,8 @@
-from snmp import snmp_get_all, snmp_walk, SnmpConfiguration, SnmpEngine, CommunityData, UdpTransportTarget, ContextData
+from snmp import snmp_walk, SnmpConfiguration, SnmpEngine, CommunityData, UdpTransportTarget, ContextData
+from https import get_json_response, HttpsConfiguration
+from targets.fan import FAN_ENDPOINT
+from targets.temp import TEMP_ENDPOINT
+import traceback
 
 
 def detect_things(c: SnmpConfiguration, base_oid: str) -> list[int]:
@@ -24,6 +28,83 @@ def detect_complex(c: SnmpConfiguration, base_oid: str) -> list[tuple[int]]:
     return drives
 
 
+# since there's only two that get fetched via https, these are just kinda hacked together
+def get_fan_speeds(c: HttpsConfiguration) -> dict[int, tuple[int | float, str]]:  # {id: (speed, unit)}
+    speed_map = {}
+
+    response = get_json_response(c, FAN_ENDPOINT)
+    try:
+        fans = response['fans']
+        for fan in fans:
+
+            # try to derive fan id
+            label = fan.get('label')
+            if not isinstance(label, str):
+                continue
+
+            fan_id = str(label[4:])  # label seems to follow a format of "Fan X"
+            if not fan_id.isnumeric():
+                continue
+            fan_id = int(fan_id)
+
+            # get speed
+            speed = fan.get('speed')
+            if not (isinstance(speed, int) or isinstance(speed, float)):
+                speed = -1
+
+            # get units
+            unit = fan.get('speed_unit')
+            if not isinstance(unit, str):
+                unit = 'unknown'
+
+            speed_map[fan_id] = (speed, unit)
+    except (KeyError, TypeError) as e:
+        print('unexpected response from ILO')
+        traceback.print_exception(e)
+        print('response:', response)
+
+    return speed_map
+
+
+def get_temp_sensor_info(c: HttpsConfiguration) -> dict[int, dict[str, str | int | float]]:
+    # {id: {name: value}}
+    labels = {}
+
+    response = get_json_response(c, TEMP_ENDPOINT)
+    try:
+        sensors = response['temperature']
+        for sensor in sensors:
+            sensor_labels = {}
+
+            # try to derive sensor id
+            label = sensor.get('label')
+            if not isinstance(label, str):
+                continue
+
+            sensor_id = str(label[:2])  # label seems to follow a format of "XX-Some Sensor"
+            if not sensor_id.isnumeric():
+                continue
+            sensor_id = int(sensor_id)
+
+            for key in ['label', 'xposition', 'yposition']:
+                value = sensor.get(key)
+                if value is not None:
+                    sensor_labels[key] = str(value)
+
+            for key in ['caution', 'critical']:
+                value = sensor.get(key)
+                if isinstance(value, int) or isinstance(value, float):
+                    sensor_labels[key] = value
+
+            labels[sensor_id] = sensor_labels
+    except (KeyError, TypeError) as e:
+        print('unexpected response from ILO')
+        traceback.print_exception(e)
+        print('response:', response)
+
+    return labels
+
+
 if __name__ == '__main__':
     from targets.fan import FAN_VALUES, FAN_INDEX
     from targets.temp import TEMP_VALUES, TEMP_INDEX
@@ -34,7 +115,7 @@ if __name__ == '__main__':
 
     config = SnmpConfiguration(
         SnmpEngine(),
-        CommunityData('deeznuts'),
+        CommunityData('public'),
         UdpTransportTarget(('192.168.100.88', 161)),
         ContextData(),
     )
@@ -78,3 +159,14 @@ if __name__ == '__main__':
             print('memory slot', slot, value.name, 'is', states[slot])
         print()
 
+    print('asdf')
+    conf = HttpsConfiguration(
+        '192.168.100.88',
+        'some username',
+        'some password',
+        './ilo.pem',
+        5
+    )
+
+    print(get_fan_speeds(conf))
+    print(get_temp_sensor_info(conf))

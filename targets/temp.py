@@ -55,6 +55,9 @@ TEMP_CONDITION = BulkEnums(
     }
 )
 
+# https
+TEMP_ENDPOINT = 'json/health_temperature'
+
 # for debugging
 TEMP_VALUES = [
     TEMP_SENSOR_LOCALE,

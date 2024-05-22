@@ -1,2 +1,4 @@
-prometheus_client~=0.20.0
-pysnmp~=4.4.12
+prometheus_client
+pysnmp
+urllib3
+requests

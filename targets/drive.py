@@ -110,7 +110,7 @@ DRIVE_REFERENCE_TIME = BulkNumbers(
 
 DRIVE_SUPPORTS_PREDICTIVE_FAILURE_MONITORING = BulkEnums(
     (lambda i: (1, 3, 6, 1, 4, 1, 232, 3, 2, 5, 1, 1, 52) + i),
-    'supports_predictive_failure_monitoring',
+    'predictive_failure',
     {
         1: 'other',
         2: 'notAvailable',

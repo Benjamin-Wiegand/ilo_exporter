@@ -5,10 +5,11 @@ from prometheus_client.registry import Collector
 from pysnmp.entity.engine import SnmpEngine
 from pysnmp.hlapi import CommunityData, UdpTransportTarget, ContextData
 
+from https import HttpsConfiguration
 from snmp import SnmpConfiguration, snmp_get
 import scrape
 
-from snmp_groups import BulkValues, BulkDummyValue
+from snmp_groups import BulkValues, BulkDummyValue, BulkPredeterminedValues
 from targets.temp import *
 from targets.fan import *
 from targets.cpu import *
@@ -17,6 +18,8 @@ from targets.memory import *
 from targets.power import *
 
 import argparse
+import os
+import traceback
 
 NAMESPACE = 'ilo'
 
@@ -32,15 +35,17 @@ arg_parser.add_argument('-c', '--snmp-community', default='public', help='SNMP c
 arg_parser.add_argument('--snmp-port', default=161, help='SNMP port to use.')
 arg_parser.add_argument('-o', '--scan-once', action='store_true', help='Only scan for SNMP variables on init, instead of on each collection (except hard drives, see --scan-drives-once). This is a small optimizaion that can be used if your sever configuration never changes.')
 arg_parser.add_argument('--scan-drives-once', action='store_true', help='When combined with --scan-once, this also prevents hard drives from being rescanned on collection. This is not recommeded.')
-arg_parser.add_argument('-v', '--verbose', action='store_true', help='Increases verbosity.')
-arg_parser.add_argument('-q', '--quiet', action='store_true', help='Tells the exporter to stfu under normal operation unless there is an error/warning.')
+arg_parser.add_argument('-v', '--verbose', action='store_true', help='Increases verbosity. Incompatible with --quiet')
+arg_parser.add_argument('-q', '--quiet', action='store_true', help='Tells the exporter to stfu under normal operation unless there is an error/warning. Incompatible with --verbose')
 
-args = arg_parser.parse_args()
-if args.quiet and args.verbose:
-    print('stop it. (--quiet and --verbose do not mix)')
-    exit(1)
+arg_parser.add_argument('--https-temperature', action='store_true', help='Attempt to fetch and combine additional temperature sensor info over https, such as sensor names. Requires ILO_USERNAME and ILO_PASSWORD environment variables.')
+arg_parser.add_argument('--https-fans', action='store_true', help='Attempt to fetch the fan speed of each fan in percent over https. Requires ILO_USERNAME and ILO_PASSWORD environment variables.')
+arg_parser.add_argument('--https-verify', action='store_true', help='Enable SSL verification with ILO for https requests. You can optionally specify a specific certificate to use with the ILO_CERTIFICATE environment variable.')
+arg_parser.add_argument('--https-timeout', default=5, help='Set the timeout for getting metrics over https. This sets both the connect timeout and the response timeout, meaning the actual maximum amount of allowed time is double this value, while the minimum amount of time is equal to it.')
 
-SCAN_FAIL_COUNTER = Counter('scrape_failures', 'Number of times scraping the iLO for SNMP variables has failed.', namespace=NAMESPACE, subsystem='exporter')
+
+SCAN_FAIL_COUNTER = Counter('scrape_failures', 'Number of times scraping the ILO for SNMP variables has failed.', namespace=NAMESPACE, subsystem='exporter')
+HTTPS_FAIL_COUNTER = None
 
 
 def noisy(*a, **kwa):
@@ -102,14 +107,17 @@ class BulkCollector(Collector):
                 # values are not reused
                 value_map = bulk_values.get_values(self._snmp_config, self._ids)
 
-                # do some fuckery (bad design, I know.)
+                # map everything
                 for i in self._ids:
                     labels = [str(i)]  # id is first
                     for label_map in label_maps:
                         label_value = label_map[i]
                         labels.append(str(label_value))
 
-                    value = value_map[i]
+                    value = value_map.get(i)
+                    if value is None:
+                        print('missing value! metric:', metric_name, 'id:', i)
+                        value = 'nan'
                     metric.add_metric(labels, value)
 
                 yield metric
@@ -161,8 +169,64 @@ class PowerCollector(Collector):
             raise e
 
 
+class FanSpeedCollector(Collector):
+    def __init__(self, https_config: HttpsConfiguration):
+        self._https_config = https_config
+
+    def collect(self) -> float:
+        verbose('collecting ilo_fan_speed')
+        try:
+            metric = GaugeMetricFamily('ilo_fan_speed', 'Detailed fan speed as returned from the ILO over https', labels=['id', 'units'])
+            fan_speeds = scrape.get_fan_speeds(self._https_config)
+            for fan in fan_speeds:
+                speed, units = fan_speeds[fan]
+                metric.add_metric([str(fan), units], speed)
+
+            yield metric
+        except Exception as e:
+            #
+            print('Failed to fetch fan speed')
+            traceback.print_exception(e)
+            SCAN_FAIL_COUNTER.inc()
+
+
 if __name__ == '__main__':
 
+    args = arg_parser.parse_args()
+
+    # validate args
+    if args.quiet and args.verbose:
+        print('--quiet and --verbose do not mix')
+        exit(1)
+
+    using_https = args.https_temperature or args.https_fans
+    if using_https:
+        https_user = os.getenv('ILO_USERNAME')
+        https_pass = os.getenv('ILO_PASSWORD')
+        if https_user is None or https_pass is None:
+            print('Fetching values over https requires setting the ILO_USERNAME and ILO_PASSWORD environment variables.')
+            exit(1)
+
+        if args.https_verify:
+            ssl_cert = os.getenv('ILO_CERTIFICATE')
+            if ssl_cert is not None:
+                ssl_verify = ssl_cert
+            else:
+                ssl_verify = True  # use system certificates
+        else:
+            ssl_verify = False
+            # disable insecure request warning if not verifying requests. Instead, give a single warning at init
+            from urllib3 import disable_warnings
+            from urllib3.exceptions import InsecureRequestWarning
+
+            disable_warnings(InsecureRequestWarning)
+            print('Warning! Not verifying SSL certificate for https requests to the ILO.')
+    else:
+        https_user = None
+        https_pass = None
+        ssl_verify = None
+
+    # init everything
     config = SnmpConfiguration(
         SnmpEngine(),
         CommunityData(args.snmp_community),
@@ -170,18 +234,75 @@ if __name__ == '__main__':
         ContextData(),
     )
 
+    if using_https:
+        https_config = HttpsConfiguration(
+            args.ilo_address,
+            https_user,
+            https_pass,
+            ssl_verify,
+            args.https_timeout
+        )
+        HTTPS_FAIL_COUNTER = Counter('https_failures', 'Number of times scraping the ILO over HTTPS has failed.', namespace=NAMESPACE, subsystem='exporter')
+    else:
+        https_config = None
+
     REGISTRY.register(PowerCollector())
 
     no_value = BulkDummyValue('info')
+
+    https_temp_labels = []
+    https_temp_groups = []
+    temp_scan_method = scrape.detect_things
+    if args.https_temperature:
+        temp_label = BulkPredeterminedValues('label')
+        temp_x_pos = BulkPredeterminedValues('x_pos')
+        temp_y_pos = BulkPredeterminedValues('y_pos')
+        https_temp_labels = [temp_label, temp_x_pos, temp_y_pos]
+
+        temp_caution_threshold = BulkPredeterminedValues('threshold_caution')
+        temp_critical_threshold = BulkPredeterminedValues('threshold_critical')
+        https_temp_groups = [
+            ('Temperature caution thresholds for each temperature sensor in celsius as returned by the ILO over HTTPS', temp_caution_threshold, []),
+            ('Temperature critical thresholds for each temperature sensor in celsius as returned by the ILO over HTTPS', temp_critical_threshold, []),
+        ]
+
+        def scan_temperature_info(c: SnmpConfiguration, base_oid: str):
+            sensors = scrape.detect_things(c, base_oid)
+            try:
+                # clear old mappings
+                temp_label.values = {}
+                temp_x_pos.values = {}
+                temp_y_pos.values = {}
+                temp_caution_threshold.values = {}
+                temp_critical_threshold.values = {}
+
+                # get new mappings
+                label_map = scrape.get_temp_sensor_info(https_config)
+                for sensor in sensors:
+                    labels = label_map.get(sensor, {})
+                    temp_label.values[sensor] = labels.get('label', 'unknown')
+                    temp_x_pos.values[sensor] = labels.get('xposition', '-1')
+                    temp_y_pos.values[sensor] = labels.get('yposition', '-1')
+                    temp_caution_threshold.values[sensor] = labels.get('caution', -1)
+                    temp_critical_threshold.values[sensor] = labels.get('critical', -1)
+            except Exception as e:
+                print('failed to fetch additional temperature sensor data over HTTPS')
+                HTTPS_FAIL_COUNTER.inc()
+                traceback.print_exception(e)
+            return sensors
+
+        temp_scan_method = scan_temperature_info
 
     REGISTRY.register(BulkCollector(
         config,
         TEMP_INDEX,
         'temperature',
         not args.scan_once,
-        ('Information temperature sensors', no_value, [TEMP_SENSOR_LOCALE, TEMP_CONDITION, TEMP_THRESHOLD_TYPE]),
+        ('Information temperature sensors', no_value, [TEMP_SENSOR_LOCALE, TEMP_CONDITION, TEMP_THRESHOLD_TYPE, *https_temp_labels]),
         ('Temperatures readings of each temperature sensor in celsius', TEMP_CELSIUS, []),
         ('Temperature thresholds for each temperature sensor in celsius', TEMP_THRESHOLD, []),
+        *https_temp_groups,
+        scan_method=temp_scan_method
     ))
 
     REGISTRY.register(BulkCollector(
@@ -191,6 +312,10 @@ if __name__ == '__main__':
         not args.scan_once,
         ('Information about system fans', no_value, [FAN_LOCALE, FAN_CONDITION, FAN_SPEED, FAN_PRESENT, FAN_PRESENCE_TEST]),
     ))
+
+    # enhanced fan metrics over https
+    if args.https_fans:
+        REGISTRY.register(FanSpeedCollector(https_config))
 
     REGISTRY.register(BulkCollector(
         config,

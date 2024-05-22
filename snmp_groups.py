@@ -45,16 +45,22 @@ class BulkDummyValue(BulkValues):
         super().__init__(None, name)
         self._name = name
 
-    @property
-    def name(self):
-        return self._name
-
     def get_values(self, _: SnmpConfiguration, indexes: list) -> dict:
         result_dict = {}
         for index in indexes:
             result_dict[index] = 1
 
         return result_dict
+
+
+class BulkPredeterminedValues(BulkValues):
+    def __init__(self, name: str, values: dict = {}):
+        super().__init__(None, name)
+        self._name = name
+        self.values = values
+
+    def get_values(self, c: SnmpConfiguration, indexes: list) -> dict:
+        return self.values
 
 
 class BulkNumbers(BulkValues):
