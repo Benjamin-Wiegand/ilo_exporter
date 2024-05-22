@@ -22,10 +22,11 @@ import os
 import traceback
 
 NAMESPACE = 'ilo'
+VERSION = '1.0.0'
 
 arg_parser = argparse.ArgumentParser(
     'ilo_exporter',
-    description='A fast(er) prometheus exporter for applicable HP servers using SNMP via the ILO controller.',
+    description='A fast(er) prometheus exporter for applicable HP servers using SNMP via the ILO controller. v%s' % VERSION,
 )
 
 arg_parser.add_argument('-i', '--ilo-address', help='ILO IP address to scan.', required=True)
