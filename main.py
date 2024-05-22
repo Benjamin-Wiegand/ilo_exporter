@@ -34,8 +34,8 @@ arg_parser.add_argument('-a', '--server-address', default='0.0.0.0', help='Addre
 arg_parser.add_argument('-p', '--server-port', default=6969, help='Port to bind for the metrics endpoint.')
 arg_parser.add_argument('-c', '--snmp-community', default='public', help='SNMP community to read.')
 arg_parser.add_argument('--snmp-port', default=161, help='SNMP port to use.')
-arg_parser.add_argument('-o', '--scan-once', action='store_true', help='Only scan for SNMP variables on init, instead of on each collection (except hard drives, see --scan-drives-once). This is a small optimizaion that can be used if your sever configuration never changes.')
-arg_parser.add_argument('--scan-drives-once', action='store_true', help='When combined with --scan-once, this also prevents hard drives from being rescanned on collection. This is not recommeded.')
+arg_parser.add_argument('-o', '--scan-once', action='store_true', help='Only scan for SNMP variables on init, instead of on each collection (except hard drives, see --scan-drives-once). This is a small optimization that can be used if your sever configuration never changes.')
+arg_parser.add_argument('--scan-drives-once', action='store_true', help='When combined with --scan-once, this also prevents hard drives from being rescanned on collection. This is not recommended.')
 arg_parser.add_argument('-v', '--verbose', action='store_true', help='Increases verbosity. Incompatible with --quiet')
 arg_parser.add_argument('-q', '--quiet', action='store_true', help='Tells the exporter to stfu under normal operation unless there is an error/warning. Incompatible with --verbose')
 
