@@ -1,0 +1,5358 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 41,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 14,
+      "panels": [],
+      "title": "summaries",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "Number of failed scrapes within the current time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "increase(ilo_exporter_scrape_failures_total{$ilo_ident=~\"$node\"}[$__range])",
+          "instant": false,
+          "legendFormat": "SNMP failures",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "increase(ilo_exporter_https_failures_total{$ilo_ident=~\"$node\"}[$__range])",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "HTTPS failures",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Exporter failures",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of drive health. Drives with bad health will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ok"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(condition) (ilo_drive_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Drive health summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "The total power draw reported by the ILO(s) in watts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 150
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 200
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 400
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_server_power_draw{$ilo_ident=~\"$node\"}",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}]",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Power Draw",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of temperature status. Bad temperature statuses will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ok"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(condition) (ilo_temperature_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Temperature summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of CPU health. Unhealthy CPUs will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ok"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(status) (ilo_cpu_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{status}}",
+          "range": false,
+          "refId": "good fans",
+          "useBackend": false
+        }
+      ],
+      "title": "CPU health summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of fan health. Unhealthy fans will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "normal"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(condition) (ilo_fan_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "good fans",
+          "useBackend": false
+        }
+      ],
+      "title": "Fan health summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of memory health. Memory modules in bad health will add new red numbers to this display, labeled appropriately.\n\nMemory modules with status \"notPresent\" are hidden.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ok"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "ok"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 5
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(condition) (ilo_memory_info{$ilo_ident=~\"$node\", status!=\"notPresent\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Memory health summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of drive status. Drives with status other than \"Ok\" will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ok"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "ok"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 5
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(status) (ilo_drive_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Drive status summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "The number of currently crossed temperature thresholds.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 5
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count((ilo_temperature_celsius{$ilo_ident=~\"$node\"} > on($ilo_ident, id) (ilo_temperature_threshold{$ilo_ident=~\"$node\"} > 0)))",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Crossed Temperature thresholds",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A generalization of the combined CPU power your server(s). \n\nThis doesn't mean much on its own, but it looks cool.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "cycles"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "rotmhz"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 4,
+        "x": 16,
+        "y": 5
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(ilo_cpu_cores_enabled{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "total cores",
+          "range": false,
+          "refId": "cores",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(ilo_cpu_threads_available{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "total threads",
+          "range": false,
+          "refId": "threads",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(ilo_cpu_speed{$ilo_ident=~\"$node\"} * on($ilo_ident, id) ilo_cpu_threads_available{$ilo_ident=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "total rate",
+          "range": false,
+          "refId": "cycles"
+        }
+      ],
+      "title": "CPU summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "present"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 5
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(presence) (ilo_fan_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{presence}}",
+          "range": false,
+          "refId": "good fans",
+          "useBackend": false
+        }
+      ],
+      "title": "Fan presence summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of memory status. Memory modules with status other than \"good\" or \"notPresent\" or \"spare\" will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "good"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "ok"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/notPresent|spare/"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#808080",
+                      "value": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 9
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(status) (ilo_memory_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Memory status summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A summary of drive SMART status. Drives with bad SMART status will add new red numbers to this display, labeled appropriately.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ok"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 9
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(smart_status) (ilo_drive_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{condition}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Drive SMART summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "The total power draw reported by the ILO(s) in watts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 150
+              },
+              {
+                "color": "dark-orange",
+                "value": 200
+              },
+              {
+                "color": "red",
+                "value": 400
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 8,
+        "y": 9
+      },
+      "id": 43,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_server_power_draw{$ilo_ident=~\"$node\"}",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}]",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Power Draw",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "Ambient temperature averaged across all nodes.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 21
+              },
+              {
+                "color": "semi-dark-yellow",
+                "value": 26
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 32
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 37
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 9
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "avg(ilo_temperature_celsius{$ilo_ident=~\"$node\", id=\"1\"})",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}]",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ambient temperature",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-green",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "normal"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 9
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count by(speed) (ilo_fan_info{$ilo_ident=~\"$node\"})",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{speed}}",
+          "range": false,
+          "refId": "good fans",
+          "useBackend": false
+        }
+      ],
+      "title": "Fan speed summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A generalization of the combined memory capacity of your server(s). \n\nThis doesn't mean much on its own, but it looks cool.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "deckbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 13
+      },
+      "id": 47,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(ilo_memory_size{$ilo_ident=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "total memory",
+          "range": false,
+          "refId": "size"
+        }
+      ],
+      "title": "Memor summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A generalization of the combined drive capacity of your server(s). \n\nThis doesn't mean much on its own, but it looks cool.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decmbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 13
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(ilo_drive_size{$ilo_ident=~\"$node\"})",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "total disk",
+          "range": false,
+          "refId": "size"
+        }
+      ],
+      "title": "Drive summary",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 60
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 13
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "max(ilo_temperature_celsius{$ilo_ident=~\"$node\"})",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}]",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Maximum temperature",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 13
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "max(ilo_fan_speed{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(locale) ilo_fan_info{$ilo_ident=~\"$node\"})",
+          "instant": false,
+          "legendFormat": "max speed",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "avg(ilo_fan_speed{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(locale) ilo_fan_info{$ilo_ident=~\"$node\"})",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "avg speed",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Maximum fan speed",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 10,
+      "panels": [],
+      "title": "temperature details",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "Temperature of each sensor. \n\nNOTE: The color shown is a generalization, and not representative of whether the temperature has exceeded thresholds.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 50
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 60
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 16,
+        "x": 0,
+        "y": 18
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_temperature_celsius{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(label) ilo_temperature_info{$ilo_ident=~\"$node\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] {{label}}",
+          "range": true,
+          "refId": "with labels"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_temperature_celsius{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(sensor_locale) ilo_temperature_info{$ilo_ident=~\"$node\"} ",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "{{id}}-{{sensor_locale}}",
+          "range": true,
+          "refId": "pure snmp"
+        }
+      ],
+      "title": "Temperature stats",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "Temperature represented as a percentage of the provided temperature threshold.\n\nThis can be used to identify sensors that are closest to or have already crossed said threshold.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 8,
+        "x": 16,
+        "y": 18
+      },
+      "id": 5,
+      "options": {
+        "calculate": false,
+        "cellGap": 1,
+        "cellValues": {
+          "unit": "percentunit"
+        },
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "max": 1,
+          "min": 0,
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Inferno",
+          "steps": 64
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
+        },
+        "tooltip": {
+          "mode": "single",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "right",
+          "reverse": false
+        }
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "(ilo_temperature_celsius{$ilo_ident=~\"$node\"} / on($ilo_ident, id) (ilo_temperature_threshold{$ilo_ident=~\"$node\"} > 0)) * on($ilo_ident, id) group_left(label, threshold_type) ilo_temperature_info{$ilo_ident=~\"$node\"}",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] {{threshold_type}} - {{label}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "(ilo_temperature_celsius{$ilo_ident=~\"$node\"} / on($ilo_ident, id) (ilo_temperature_threshold{$ilo_ident=~\"$node\"} > 0)) * on($ilo_ident, id) group_left(sensor_locale, threshold_type) ilo_temperature_info{$ilo_ident=~\"$node\"}",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] {{threshold_type}} - {{id}}-{{sensor_locale}}",
+          "range": true,
+          "refId": "pure snmp"
+        }
+      ],
+      "title": "Temperature Threshold Proximity",
+      "type": "heatmap"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "Detailed information about every reported temperature sensor.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#000000"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "power_status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "High Powered": {
+                        "color": "dark-purple",
+                        "index": 2
+                      },
+                      "Low Powered": {
+                        "color": "dark-blue",
+                        "index": 0
+                      },
+                      "Normal Powered": {
+                        "color": "dark-green",
+                        "index": 1
+                      },
+                      "unknown": {
+                        "color": "#808080",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "condition"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "degraded": {
+                        "color": "dark-orange",
+                        "index": 1
+                      },
+                      "failed": {
+                        "color": "dark-red",
+                        "index": 2
+                      },
+                      "ok": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temperature"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue"
+                    },
+                    {
+                      "color": "green",
+                      "value": 50
+                    },
+                    {
+                      "color": "orange",
+                      "value": 60
+                    },
+                    {
+                      "color": "red",
+                      "value": 70
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "threshold"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              },
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "N/A"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "threshold_proximity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "percentage",
+                  "steps": [
+                    {
+                      "color": "semi-dark-blue"
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 50
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 80
+                    },
+                    {
+                      "color": "semi-dark-red",
+                      "value": 100
+                    },
+                    {
+                      "color": "transparent",
+                      "value": 18446744073709552000
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "max",
+                "value": 1
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "gauge"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "threshold_type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 148
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "blowout": {
+                        "color": "semi-dark-red",
+                        "index": 0
+                      },
+                      "caution": {
+                        "color": "semi-dark-yellow",
+                        "index": 1
+                      },
+                      "critical": {
+                        "color": "semi-dark-orange",
+                        "index": 2
+                      },
+                      "noreaction": {
+                        "color": "semi-dark-blue",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "location"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "x_pos"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "y_pos"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "label"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 19,
+        "x": 0,
+        "y": 42
+      },
+      "id": 18,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(label_join(ilo_temperature_info{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\"), \"ilo\", \",\", \"$ilo_ident\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "info"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_temperature_celsius{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "temps",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_temperature_threshold{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "thresholds",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_temperature_celsius{$ilo_ident=~\"$node\"} / on(job, instance, id, sensor_locale) ilo_temperature_threshold{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "danger"
+        }
+      ],
+      "title": "Temperature Sensor Info",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "temps"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "id": true,
+              "identifier": false,
+              "instance": true,
+              "job": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "thresholds"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 2": true,
+              "__name__": true,
+              "__name__ 2": true,
+              "id": true,
+              "id 2": true,
+              "ilo 2": true,
+              "instance": true,
+              "instance 2": true,
+              "job": true,
+              "job 2": true,
+              "name": true,
+              "sensor_locale": true,
+              "sensor_locale 2": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Time 2": "",
+              "threshold_type": ""
+            }
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "danger"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "id": true,
+              "id 1": true,
+              "identifier": false,
+              "ilo 1": true,
+              "instance": true,
+              "instance 1": true,
+              "job": true,
+              "job 1": true,
+              "sensor_locale": true,
+              "sensor_locale 1": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "identifier",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Value": true,
+              "Value #info": true,
+              "__name__": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "__name__ 4": true,
+              "identifier": true,
+              "instance": true,
+              "instance 2": true,
+              "job": true,
+              "job 2": true,
+              "locale": false,
+              "power_status": false,
+              "presence_test": false
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value #danger": 11,
+              "Value #info": 16,
+              "Value #temps": 9,
+              "Value #thresholds": 10,
+              "__name__": 1,
+              "condition": 13,
+              "id": 4,
+              "identifier": 2,
+              "ilo": 3,
+              "instance": 14,
+              "job": 15,
+              "label": 5,
+              "sensor_locale": 6,
+              "threshold_type": 12,
+              "x_pos": 7,
+              "y_pos": 8
+            },
+            "renameByName": {
+              "Value #cores": "cores_enabled",
+              "Value #danger": "threshold_proximity",
+              "Value #info": "",
+              "Value #speed": "speed",
+              "Value #step": "step",
+              "Value #temps": "temperature",
+              "Value #threads": "threads_available",
+              "Value #thresholds": "threshold",
+              "condition": "",
+              "id": "",
+              "instance": "",
+              "instance 1": "instance",
+              "job": "",
+              "job 1": "job",
+              "name 1": "name",
+              "power_status": "",
+              "sensor_locale": "location",
+              "status": "",
+              "threshold_type": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "Temperatures plotted on an x/y graph, similar to the 2d temperature graph in the ILO control panel.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 15.5,
+            "axisSoftMin": -0.5,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointSize": {
+              "fixed": 5
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 5,
+        "x": 19,
+        "y": 42
+      },
+      "id": 33,
+      "options": {
+        "dims": {
+          "frame": 0
+        },
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "stdDev"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "series": [
+          {
+            "name": "temperature grid",
+            "pointColor": {
+              "field": "temperature"
+            },
+            "pointSize": {
+              "field": "temperature",
+              "fixed": 50.5,
+              "max": 48,
+              "min": 16
+            },
+            "x": "x",
+            "y": "y"
+          }
+        ],
+        "seriesMapping": "manual",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "ilo_temperature_celsius{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(x_pos, y_pos, label, sensor_locale, condition, threshold_type) ilo_temperature_info{$ilo_ident=~\"$node\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Temperature map",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Value": false,
+              "instance": true,
+              "job": true,
+              "label": false,
+              "x_pos": false
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value": 10,
+              "condition": 1,
+              "id": 2,
+              "instance": 3,
+              "job": 4,
+              "label": 5,
+              "sensor_locale": 6,
+              "threshold_type": 7,
+              "x_pos": 8,
+              "y_pos": 9
+            },
+            "renameByName": {
+              "Time": "",
+              "Value": "temperature",
+              "Value #A": "temperature",
+              "condition": "status",
+              "id": "sensor id",
+              "instance": "",
+              "label": "sensor",
+              "sensor_locale": "location",
+              "threshold_type": "threshold",
+              "x_pos": "x",
+              "y_pos": "y"
+            }
+          }
+        }
+      ],
+      "type": "xychart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A graph showing the temperatures of various sensors over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 70,
+            "axisSoftMin": 25,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent"
+              },
+              {
+                "color": "red",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 58
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "mean",
+            "max",
+            "stdDev"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "width": 550
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_temperature_celsius{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(label) ilo_temperature_info{$ilo_ident=~\"$node\"}",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] {{label}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_temperature_celsius{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(sensor_locale) ilo_temperature_info{$ilo_ident=~\"$node\"}",
+          "hide": true,
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] {{id}}-{{sensor_locale}}",
+          "range": true,
+          "refId": "pure snmp"
+        }
+      ],
+      "title": "Temperatures",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 72
+      },
+      "id": 8,
+      "panels": [],
+      "title": "fan details",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "A graph of various fan speeds over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 50,
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 73
+      },
+      "id": 32,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "mean",
+            "max",
+            "stdDev"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "width": 550
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "ilo_fan_speed{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(locale) ilo_fan_info{$ilo_ident=~\"$node\"}",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] {{locale}} fan {{id}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Fan speed",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#000000"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "condition"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "degraded": {
+                        "color": "dark-orange",
+                        "index": 1
+                      },
+                      "failed": {
+                        "color": "dark-red",
+                        "index": 2
+                      },
+                      "normal": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "presence"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "absent": {
+                        "color": "dark-red",
+                        "index": 1
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 2
+                      },
+                      "present": {
+                        "color": "dark-green",
+                        "index": 0
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "speed level"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "high": {
+                        "color": "dark-orange",
+                        "index": 1
+                      },
+                      "normal": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 2
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "locale"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "presence_test"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 148
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #speed"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gauge",
+                  "valueDisplayMode": "color"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-GrYlRd"
+                }
+              },
+              {
+                "id": "max",
+                "value": 100
+              },
+              {
+                "id": "min",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 15,
+        "x": 0,
+        "y": 85
+      },
+      "id": 44,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(label_join(ilo_fan_info{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\", \"id\"), \"ilo\", \",\", \"$ilo_ident\")",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "info"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_fan_speed{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\", \"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "speed"
+        }
+      ],
+      "title": "fan info",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "speed"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "id": true,
+              "identifier": false,
+              "instance": true,
+              "job": true,
+              "units": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "identifier",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #info": true,
+              "__name__": true,
+              "identifier": true,
+              "instance": true,
+              "job": true,
+              "locale": false,
+              "presence_test": false,
+              "units": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value #info": 12,
+              "Value #speed": 13,
+              "__name__": 1,
+              "condition": 11,
+              "id": 6,
+              "identifier": 4,
+              "ilo": 5,
+              "instance": 3,
+              "job": 2,
+              "locale": 7,
+              "presence": 9,
+              "presence_test": 8,
+              "speed": 10,
+              "units": 14
+            },
+            "renameByName": {
+              "Value #info": "",
+              "Value #speed": "speed",
+              "condition": "",
+              "presence": "",
+              "speed": "speed level",
+              "units": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 96
+      },
+      "id": 15,
+      "panels": [],
+      "title": "cpu details",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#000000"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "power_status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "High Powered": {
+                        "color": "dark-purple",
+                        "index": 2
+                      },
+                      "Low Powered": {
+                        "color": "dark-blue",
+                        "index": 0
+                      },
+                      "Normal Powered": {
+                        "color": "dark-green",
+                        "index": 1
+                      },
+                      "unknown": {
+                        "color": "#808080",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "degraded": {
+                        "color": "dark-orange",
+                        "index": 1
+                      },
+                      "disabled": {
+                        "color": "#94571f",
+                        "index": 3
+                      },
+                      "failed": {
+                        "color": "dark-red",
+                        "index": 2
+                      },
+                      "ok": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "unknown": {
+                        "color": "#808080",
+                        "index": 4
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "speed"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "rotmhz"
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "step"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "threads_available"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cores_enabled"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 15,
+        "x": 0,
+        "y": 97
+      },
+      "id": 16,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(label_join(ilo_cpu_info{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\"), \"ilo\", \",\", \"$ilo_ident\")",
+          "format": "table",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "info",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_cpu_speed{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "speed"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_cpu_step{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "step"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_cpu_cores_enabled{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "cores"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_cpu_threads_available{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "threads"
+        }
+      ],
+      "title": "CPU info",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "speed"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "id": true,
+              "ilo 4": true,
+              "instance": true,
+              "job": true,
+              "name": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "step"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "id": true,
+              "ilo 3": true,
+              "instance": true,
+              "job": true,
+              "name": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "cores"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "id": true,
+              "ilo 2": true,
+              "instance": true,
+              "job": true,
+              "name": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Time": ""
+            }
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "threads"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "id": true,
+              "identifier": false,
+              "ilo 1": true,
+              "instance": true,
+              "job": true,
+              "name": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "identifier",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Value": true,
+              "Value #info": true,
+              "__name__": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "__name__ 4": true,
+              "identifier": true,
+              "ilo": false,
+              "instance": true,
+              "instance 2": true,
+              "job": true,
+              "job 2": true,
+              "locale": false,
+              "power_status": false,
+              "presence_test": false
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value #cores": 9,
+              "Value #info": 14,
+              "Value #speed": 8,
+              "Value #step": 11,
+              "Value #threads": 10,
+              "__name__": 1,
+              "id": 6,
+              "identifier": 2,
+              "ilo": 5,
+              "instance": 4,
+              "job": 3,
+              "name": 7,
+              "power_status": 12,
+              "status": 13
+            },
+            "renameByName": {
+              "Value #cores": "cores_enabled",
+              "Value #info": "",
+              "Value #speed": "speed",
+              "Value #step": "step",
+              "Value #threads": "threads_available",
+              "condition": "",
+              "instance 1": "instance",
+              "job 1": "job",
+              "name 1": "name",
+              "power_status": "",
+              "status": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 109
+      },
+      "id": 24,
+      "panels": [],
+      "title": "drive details",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#000000"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Erase Done": {
+                        "color": "semi-dark-blue",
+                        "index": 7
+                      },
+                      "Erase Queued": {
+                        "color": "#808080",
+                        "index": 5
+                      },
+                      "Erasing": {
+                        "color": "semi-dark-purple",
+                        "index": 6
+                      },
+                      "Failed": {
+                        "color": "dark-red",
+                        "index": 1
+                      },
+                      "Not Authenticated": {
+                        "color": "#7a6200",
+                        "index": 4
+                      },
+                      "Ok": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "Other": {
+                        "color": "#808080",
+                        "index": 8
+                      },
+                      "Predictive Failure": {
+                        "color": "dark-orange",
+                        "index": 2
+                      },
+                      "SSD Wear Out": {
+                        "color": "dark-red",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "condition"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "degraded": {
+                        "color": "dark-orange",
+                        "index": 1
+                      },
+                      "failed": {
+                        "color": "dark-red",
+                        "index": 2
+                      },
+                      "ok": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "unknown": {
+                        "color": "#808080",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temp"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "custom.width",
+                "value": 67
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-blue"
+                    },
+                    {
+                      "color": "semi-dark-green",
+                      "value": 30
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 35
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 40
+                    },
+                    {
+                      "color": "semi-dark-red",
+                      "value": 50
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "max_temp"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "celsius"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ref_time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "unit",
+                "value": "h"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bay"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "box"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 87
+              },
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "link_rate"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "port"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "smart_status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "ok": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 2
+                      },
+                      "replaceDrive": {
+                        "color": "dark-red",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "predictive_failure"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "available": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "notAvailable": {
+                        "color": "dark-red",
+                        "index": 1
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 2
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "threshold"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "speed"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "firmware"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 101
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "media_type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 110
+      },
+      "id": 23,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "box"
+          }
+        ]
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(label_join(ilo_drive_info{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\"), \"ilo\", \",\", \"$ilo_ident\")",
+          "format": "table",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "info",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_drive_size{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "size"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_drive_temperature{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "temp"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_drive_temperature_threshold{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "temp thresh"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_drive_temperature_maximum{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "temp max"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_drive_reference_time{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\",\"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "ref time"
+        }
+      ],
+      "title": "drive info",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "size"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "bay": true,
+              "bay 2": true,
+              "box": true,
+              "box 2": true,
+              "id": true,
+              "ilo 4": true,
+              "instance": true,
+              "job": true,
+              "location": true,
+              "location 2": true,
+              "name": true,
+              "serial": true,
+              "serial 2": true,
+              "vendor": true,
+              "vendor 2": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "temp"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "bay": true,
+              "bay 1": true,
+              "box": true,
+              "box 1": true,
+              "id": true,
+              "ilo 3": true,
+              "instance": true,
+              "job": true,
+              "location": true,
+              "location 1": true,
+              "name": true,
+              "serial": true,
+              "serial 1": true,
+              "vendor": true,
+              "vendor 1": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "temp thresh"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 3": true,
+              "__name__": true,
+              "__name__ 3": true,
+              "bay": true,
+              "bay 3": true,
+              "box": true,
+              "box 3": true,
+              "id": true,
+              "id 3": true,
+              "instance": true,
+              "instance 3": true,
+              "job": true,
+              "job 3": true,
+              "location": true,
+              "location 3": true,
+              "serial": true,
+              "serial 3": true,
+              "vendor": true,
+              "vendor 3": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "temp max"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "bay": true,
+              "bay 1": true,
+              "bay 2": false,
+              "box": true,
+              "box 1": true,
+              "box 2": false,
+              "id": true,
+              "id 2": true,
+              "instance": true,
+              "job": true,
+              "location": true,
+              "location 2": true,
+              "serial": true,
+              "serial 2": true,
+              "vendor": true,
+              "vendor 2": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "ref time"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "__name__": true,
+              "__name__ 1": true,
+              "bay": true,
+              "bay 1": true,
+              "box": true,
+              "box 1": true,
+              "id": true,
+              "id 1": true,
+              "instance": true,
+              "instance 1": true,
+              "job": true,
+              "job 1": true,
+              "location": true,
+              "location 1": true,
+              "serial": true,
+              "serial 1": true,
+              "vendor": true,
+              "vendor 1": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "identifier",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "Value": true,
+              "Value #info": true,
+              "Value #temp thresh": false,
+              "__name__": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "__name__ 4": true,
+              "bay": false,
+              "id": true,
+              "identifier": true,
+              "ilo": false,
+              "instance": true,
+              "instance 2": true,
+              "job": true,
+              "job 2": true,
+              "locale": false,
+              "location": true,
+              "power_status": false,
+              "presence_test": false,
+              "status": false
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 25,
+              "Value #info": 24,
+              "Value #ref time": 16,
+              "Value #size": 14,
+              "Value #temp": 17,
+              "Value #temp max": 19,
+              "Value #temp thresh": 18,
+              "__name__": 0,
+              "bay": 8,
+              "box": 7,
+              "condition": 21,
+              "firmware": 11,
+              "id": 5,
+              "identifier": 1,
+              "ilo": 4,
+              "instance": 3,
+              "job": 2,
+              "link_rate": 15,
+              "media_type": 12,
+              "port": 6,
+              "predictive_failure": 23,
+              "rotational_speed": 13,
+              "serial": 10,
+              "smart_status": 22,
+              "status": 20,
+              "vendor": 9
+            },
+            "renameByName": {
+              "Value #cores": "cores_enabled",
+              "Value #info": "",
+              "Value #ref time": "ref_time",
+              "Value #size": "size",
+              "Value #speed": "speed",
+              "Value #step": "step",
+              "Value #temp": "temp",
+              "Value #temp danger": "temp_threshold proximity",
+              "Value #temp max": "max_temp",
+              "Value #temp thresh": "threshold",
+              "Value #threads": "threads_available",
+              "condition": "",
+              "instance 1": "instance",
+              "job 1": "job",
+              "link_rate": "",
+              "media_type": "",
+              "name 1": "name",
+              "power_status": "",
+              "rotational_speed": "speed",
+              "status": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 40,
+            "axisSoftMin": 25,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent"
+              },
+              {
+                "color": "semi-dark-orange",
+                "value": 40
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 15,
+        "x": 0,
+        "y": 123
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "expr": "255 > (ilo_drive_temperature{$ilo_ident=~\"$node\"} * on($ilo_ident, id) group_left(port, box, bay, vendor, serial) ilo_drive_info{$ilo_ident=~\"$node\"}) > 0",
+          "instant": false,
+          "legendFormat": "[{{$ilo_ident}}] ({{port}}, {{box}}, {{bay}}) - {{vendor}} {{serial}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "drive temperature",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 136
+      },
+      "id": 38,
+      "panels": [],
+      "title": "memory",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#000000"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "condition"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "degraded": {
+                        "color": "dark-red",
+                        "index": 1
+                      },
+                      "degradedModuleIndexUnknown": {
+                        "color": "dark-red",
+                        "index": 2
+                      },
+                      "ok": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 3
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "add": {
+                        "color": "dark-purple",
+                        "index": 3
+                      },
+                      "badConfig": {
+                        "color": "dark-red",
+                        "index": 8
+                      },
+                      "degraded": {
+                        "color": "dark-orange",
+                        "index": 9
+                      },
+                      "doesNotMatch": {
+                        "color": "dark-red",
+                        "index": 6
+                      },
+                      "good": {
+                        "color": "dark-green",
+                        "index": 0
+                      },
+                      "missing": {
+                        "color": "dark-red",
+                        "index": 5
+                      },
+                      "notPresent": {
+                        "color": "#808080",
+                        "index": 2
+                      },
+                      "notSupported": {
+                        "color": "dark-red",
+                        "index": 7
+                      },
+                      "other": {
+                        "color": "#808080",
+                        "index": 12
+                      },
+                      "partial": {
+                        "color": "dark-orange",
+                        "index": 11
+                      },
+                      "present": {
+                        "color": "dark-green",
+                        "index": 1
+                      },
+                      "spare": {
+                        "color": "dark-purple",
+                        "index": 10
+                      },
+                      "upgrade": {
+                        "color": "dark-purple",
+                        "index": 4
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 128
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "part_number"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "manufacturer"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "location"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 128
+              },
+              {
+                "id": "unit",
+                "value": "deckbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 64
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 15,
+        "x": 0,
+        "y": 137
+      },
+      "id": 9,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "10.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(label_join(ilo_memory_info{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\", \"id\"), \"ilo\", \",\", \"$ilo_ident\")",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "info"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(ilo_memory_size{$ilo_ident=~\"$node\"}, \"identifier\", \",\", \"$ilo_ident\", \"id\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "size"
+        }
+      ],
+      "title": "memory info",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": "size"
+          },
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value #size": false,
+              "__name__": true,
+              "id": true,
+              "identifier": false,
+              "instance": true,
+              "job": true,
+              "units": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          },
+          "topic": "series"
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "identifier",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "Value #info": true,
+              "__name__": true,
+              "identifier": true,
+              "instance": true,
+              "job": true,
+              "locale": false,
+              "presence_test": false,
+              "units": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value #info": 13,
+              "Value #size": 10,
+              "__name__": 1,
+              "condition": 12,
+              "id": 6,
+              "identifier": 4,
+              "ilo": 5,
+              "instance": 3,
+              "job": 2,
+              "location": 7,
+              "manufacturer": 8,
+              "part_number": 9,
+              "status": 11
+            },
+            "renameByName": {
+              "Value #info": "",
+              "Value #size": "size",
+              "Value #speed": "speed",
+              "condition": "",
+              "presence": "",
+              "speed": "speed level",
+              "units": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "description": "Pick the label you wish to uniquely identify your ILO(s). For example, you could change this to job instead of instance, or some other identifier you added in your config.",
+        "hide": 2,
+        "label": "ILO Identifier",
+        "name": "ilo_ident",
+        "query": "instance",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+        },
+        "definition": "label_values(ilo_exporter_scrape_failures_total,$ilo_ident)",
+        "description": "which ILO?",
+        "hide": 0,
+        "includeAll": true,
+        "label": "ILO",
+        "multi": true,
+        "name": "node",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ilo_exporter_scrape_failures_total,$ilo_ident)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "ddf7321d-42af-4866-bf8f-7e80e18603d9"
+        },
+        "filters": [],
+        "hide": 0,
+        "name": "Filters",
+        "skipUrlSync": false,
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "ilo",
+  "uid": "bdm7mhi72yv40a",
+  "version": 82,
+  "weekStart": ""
+}
